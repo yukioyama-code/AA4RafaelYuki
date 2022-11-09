@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnInserir.setOnClickListener(new EscutadorBotaoInserir());
         btnListar.setOnClickListener(new EscutadorBotaoListar());
+        btnCalcular.setOnClickListener(new EscutadorBotaoCalcular());
+        btnZerar.setOnClickListener(new EscutadorBotaoZerar());
+        btnAtender.setOnClickListener(new EscutadorBotaoAtender());
 
 
 
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            String produto;
+            String produto, mensagemAtendido;
             boolean atendido;
             double preco;
 
@@ -116,9 +119,14 @@ public class MainActivity extends AppCompatActivity {
                     produto = i.getProduto();
                     atendido = i.isAtendido();
                     preco = i.getPreco();
+                    if(atendido == true){
+                        mensagemAtendido = "sim";
+                    }else{
+                        mensagemAtendido = "não";
+                    }
 
                     //Exibindo no Toast
-                    Toast.makeText(MainActivity.this, "Produto: "+produto+"\nAtendido: "+atendido+"\nPreço: "+preco, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Produto: "+produto+"\nAtendido: "+mensagemAtendido+"\nPreço: "+preco, Toast.LENGTH_SHORT).show();
 
 
 
@@ -130,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        // Não usado...
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
@@ -149,10 +156,145 @@ public class MainActivity extends AppCompatActivity {
             String mesa = txtMesa.getText().toString();
             DatabaseReference restaurante = BD.child("restaurante").child(mesa);
 
+            txtMesa.setText("");
+
 
             restaurante.addValueEventListener( new EscutadorFirebase() );
         }
     }
+
+
+    private class EscutadorFirebaseCalcula implements ValueEventListener {
+
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+            double preco, total = 0;
+
+            if ( dataSnapshot.exists() ) {
+
+
+
+
+                //Percorrendo o Snapshot e mostrando por meio de um toast
+
+                for ( DataSnapshot datasnapItem : dataSnapshot.getChildren() ) {
+                    Item i = datasnapItem.getValue( Item.class );
+
+                    preco = i.getPreco();
+
+                    total = total + preco;
+
+
+                }
+
+
+                Toast.makeText(MainActivity.this, "Total da conta: "+total, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    }
+
+
+
+
+    private class EscutadorBotaoCalcular implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+            String mesa = txtMesa.getText().toString();
+            DatabaseReference restaurante = BD.child("restaurante").child(mesa);
+
+            txtMesa.setText("");
+
+
+            restaurante.addValueEventListener( new EscutadorFirebaseCalcula() );
+        }
+    }
+
+
+    private class EscutadorBotaoZerar implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+            String mesa = txtMesa.getText().toString();
+            DatabaseReference restaurante = BD.child("restaurante");
+            DatabaseReference m = restaurante.child( mesa );
+            m.setValue(null);
+
+            txtMesa.setText("");
+
+        }
+    }
+
+
+
+
+    private class EscutadorFirebaseAtende implements ValueEventListener {
+
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            String mesa = txtMesaCoz.getText().toString();
+            String codigo = txtItemCoz.getText().toString();
+
+
+
+            boolean atendido;
+
+            if ( dataSnapshot.exists() ) {
+
+
+                    Item item = dataSnapshot.getValue(Item.class);
+                    item.setAtendido(true);
+                    DatabaseReference restaurante = BD.child("restaurante").child(mesa).child(codigo);
+                    restaurante.setValue(item);
+
+                //Toast.makeText(MainActivity.this, "Total da conta: "+total, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    }
+
+
+
+
+    private class EscutadorBotaoAtender implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+            String mesa = txtMesaCoz.getText().toString();
+            String codigo = txtItemCoz.getText().toString();
+            DatabaseReference restaurante = BD.child("restaurante").child(mesa).child(codigo);
+
+            txtMesa.setText("");
+
+
+            restaurante.addValueEventListener( new EscutadorFirebaseAtende() );
+        }
+    }
+
+
+
+
+
 
 
 }
