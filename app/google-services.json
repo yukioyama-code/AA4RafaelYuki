@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "713783930576",
+    "project_id": "atividadeavaliativa-7cec0",
+    "storage_bucket": "atividadeavaliativa-7cec0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713783930576:android:df8c3bbe044faaa9cab8d5",
+        "android_client_info": {
+          "package_name": "com.example.aa4rafaelyuki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713783930576-adp6ef0cog5jgilqecqijo0c1gul0ura.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5kkY8Q1qpVfSELnabEkX7GJS1syZDrOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713783930576-adp6ef0cog5jgilqecqijo0c1gul0ura.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
