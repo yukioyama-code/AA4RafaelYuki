@@ -89,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
             Item i = new Item(produto, preco);
             restaurante.child(mesa).child(codigo).setValue(i);
 
+            txtProduto.setText("");
+            txtPreco.setText("");
+            txtMesa.setText("");
+            txtItem.setText("");
+
 
 
 
